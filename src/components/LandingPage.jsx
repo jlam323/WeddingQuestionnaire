@@ -10,11 +10,13 @@ export function LandingPage({ onStart }) {
       </h1>
 
       <div className="photo-frame">
-        <img
-          src={weddingConfig.couplePhotoUrl}
-          alt={weddingConfig.couplePhotoAlt}
-          className="couple-photo"
-        />
+        <div className="photo-viewport">
+          <img
+            src={weddingConfig.couplePhotoUrl}
+            alt={weddingConfig.couplePhotoAlt}
+            className="couple-photo"
+          />
+        </div>
       </div>
 
       <h2 className="landing-headline">{weddingConfig.landingHeadline}</h2>

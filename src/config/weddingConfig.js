@@ -27,8 +27,8 @@ export const weddingConfig = {
 
   deniedCopy: {
     eyebrow: 'Invitation Pending',
-    headline: 'Not Quite Invited Yet…',
-    message: 'YOU FAILED. YOU\'RE UNINVITED',
+    headline: 'YOU FAILED',
+    message: 'YOU\'RE UNINVITED',
     retryButtonText: 'Try Again',
   },
 };
