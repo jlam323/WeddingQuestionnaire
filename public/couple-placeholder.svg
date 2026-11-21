@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Couple photo placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3ece1" />
+      <stop offset="100%" stop-color="#e4dacb" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b89768" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#4a5d4e" stop-opacity="0.25" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)" />
+  <rect x="28" y="28" width="744" height="544" rx="12" fill="none" stroke="#b89768" stroke-opacity="0.45" stroke-width="1.5" />
+  <circle cx="355" cy="245" r="76" fill="url(#accent)" />
+  <circle cx="445" cy="245" r="76" fill="url(#accent)" />
+  <path d="M400 285 C392 275 375 268 375 253 C375 243 383 236 392 236 C397 236 400 240 400 240 C400 240 403 236 408 236 C417 236 425 243 425 253 C425 268 408 275 400 285 Z" fill="#4a5d4e" fill-opacity="0.65" />
+  <text x="400" y="385" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#3b352d" letter-spacing="2">
+    Couple Photo Placeholder
+  </text>
+  <text x="400" y="422" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" fill="#756b5e">
+    Replace public/couple-placeholder.svg with your photo in weddingConfig.js
+  </text>
+</svg>
