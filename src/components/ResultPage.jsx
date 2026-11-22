@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { weddingConfig } from '../config/weddingConfig';
 
 function FeedbackCard({ item }) {
@@ -17,6 +17,13 @@ function FeedbackCard({ item }) {
 
 export function ResultPage({ result, onRetry, onBackToLanding }) {
   const { passed, feedbackItems, noteItems } = result;
+
+  useEffect(() => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    window.getSelection?.()?.removeAllRanges?.();
+  }, []);
 
   if (passed) {
     return (

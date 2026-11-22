@@ -39,6 +39,7 @@ body {
   min-height: 100%;
   font-family: var(--font-sans);
   color: var(--ink-primary);
+  caret-color: transparent;
   background: radial-gradient(circle at top, #fdfbf7 0%, var(--bg-ivory) 55%, var(--bg-champagne) 100%);
   -webkit-font-smoothing: antialiased;
 }
