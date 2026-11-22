@@ -1,99 +1,90 @@
 /**
- * Evaluates all submitted quiz answers and builds custom feedback
+ * Evaluates a single question's answer.
+ *
+ * @param {object} question
+ * @param {any} answer
+ * @param {Record<string, any>} allAnswers
+ * @returns {{
+ *   answered: boolean,
+ *   failed: boolean,
+ *   questionId: string,
+ *   questionLabel: string,
+ *   prompt: string,
+ *   selectedLabel: string,
+ *   feedback: string,
+ * }}
+ */
+export function evaluateQuestion(question, answer, allAnswers = {}) {
+  const isAnswered = answer !== undefined && answer !== null && answer !== '';
+
+  if (typeof question.evaluate === 'function') {
+    const outcome = question.evaluate(answer, allAnswers);
+    const failed = Boolean(outcome.failed);
+    return {
+      answered: isAnswered,
+      failed,
+      questionId: question.id,
+      questionLabel: question.label || question.id,
+      prompt: question.prompt,
+      selectedLabel: outcome.selectedLabel ?? String(answer ?? ''),
+      feedback: failed
+        ? outcome.feedback || 'That response did not quite pass the test.'
+        : outcome.feedback || '',
+    };
+  }
+
+  const selectedOption = question.options?.find((opt) => opt.id === answer);
+  const failed = isAnswered && (!selectedOption || Boolean(selectedOption.fail));
+
+  return {
+    answered: isAnswered && Boolean(selectedOption),
+    failed,
+    questionId: question.id,
+    questionLabel: question.label || question.id,
+    prompt: question.prompt,
+    selectedLabel: selectedOption?.label ?? 'No answer selected',
+    feedback: failed
+      ? selectedOption?.feedback ||
+        question.defaultWrongFeedback ||
+        'Not quite the answer we were hoping for!'
+      : selectedOption?.feedback || '',
+  };
+}
+
+/**
+ * Evaluates all answered quiz questions and builds custom feedback
  * based on the specific responses the guest selected.
  *
- * An answer fails if the selected option has `fail: true` (or if no option
- * was selected). Custom `feedback` is collected for any selected option that
- * defines it, so playful notes can appear on both approved and denied screens.
+ * Supports early failure (when a failing answer stops the quiz before
+ * later questions are reached) without creating bogus feedback for
+ * unanswered questions.
  *
  * @param {Array} questionList
  * @param {Record<string, any>} answers - Map of questionId -> selected optionId
- * @returns {{
- *   passed: boolean,
- *   failedItems: Array<{
- *     questionId: string,
- *     questionLabel: string,
- *     prompt: string,
- *     selectedLabel: string,
- *     feedback: string,
- *     failed: boolean,
- *   }>,
- *   noteItems: Array<{
- *     questionId: string,
- *     questionLabel: string,
- *     prompt: string,
- *     selectedLabel: string,
- *     feedback: string,
- *     failed: boolean,
- *   }>,
- *   feedbackItems: Array<{
- *     questionId: string,
- *     questionLabel: string,
- *     prompt: string,
- *     selectedLabel: string,
- *     feedback: string,
- *     failed: boolean,
- *   }>
- * }}
  */
 export function evaluateQuiz(questionList, answers) {
   const failedItems = [];
   const noteItems = [];
+  let answeredCount = 0;
 
   for (const question of questionList) {
-    const answer = answers[question.id];
+    const outcome = evaluateQuestion(question, answers[question.id], answers);
 
-    if (typeof question.evaluate === 'function') {
-      const outcome = question.evaluate(answer, answers);
-      const item = {
-        questionId: question.id,
-        questionLabel: question.label || question.id,
-        prompt: question.prompt,
-        selectedLabel: outcome.selectedLabel ?? String(answer ?? ''),
-        feedback: outcome.feedback || '',
-        failed: Boolean(outcome.failed),
-      };
-
-      if (item.failed) {
-        failedItems.push({
-          ...item,
-          feedback: item.feedback || 'That response did not quite pass the test.',
-        });
-      } else if (item.feedback) {
-        noteItems.push(item);
-      }
+    if (!outcome.answered) {
       continue;
     }
 
-    const selectedOption = question.options?.find((opt) => opt.id === answer);
-    const failed = !selectedOption || Boolean(selectedOption.fail);
+    answeredCount += 1;
 
-    if (failed) {
-      failedItems.push({
-        questionId: question.id,
-        questionLabel: question.label || question.id,
-        prompt: question.prompt,
-        selectedLabel: selectedOption?.label ?? 'No answer selected',
-        feedback:
-          selectedOption?.feedback ||
-          question.defaultWrongFeedback ||
-          'Not quite the answer we were hoping for!',
-        failed: true,
-      });
-    } else if (selectedOption.feedback) {
-      noteItems.push({
-        questionId: question.id,
-        questionLabel: question.label || question.id,
-        prompt: question.prompt,
-        selectedLabel: selectedOption.label,
-        feedback: selectedOption.feedback,
-        failed: false,
-      });
+    if (outcome.failed) {
+      failedItems.push(outcome);
+    } else if (outcome.feedback) {
+      noteItems.push(outcome);
     }
   }
 
   return {
-    passed: failedItems.length === 0,
+    passed: failedItems.length === 0 && answeredCount === questionList.length,
     failedItems,
     noteItems,
     feedbackItems: [...failedItems, ...noteItems],

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { questions } from './data/questions';
-import { evaluateQuiz } from './utils/evaluateQuiz';
+import { evaluateQuestion, evaluateQuiz } from './utils/evaluateQuiz';
 import { LandingPage } from './components/LandingPage';
 import { QuizFlow } from './components/QuizFlow';
 import { ResultPage } from './components/ResultPage';
@@ -46,16 +46,20 @@ export function App() {
     if (isAdvancingRef.current) return;
     isAdvancingRef.current = true;
 
-    setAnswers((prev) => ({
-      ...prev,
+    const nextAnswers = {
+      ...answers,
       [questionId]: value,
-    }));
+    };
+    setAnswers(nextAnswers);
 
+    const currentQuestion = questions[currentIndex];
+    const didFail = evaluateQuestion(currentQuestion, value, nextAnswers).failed;
     const isLastQuestion = currentIndex >= questions.length - 1;
+
     advanceTimerRef.current = setTimeout(() => {
       advanceTimerRef.current = null;
       isAdvancingRef.current = false;
-      if (isLastQuestion) {
+      if (didFail || isLastQuestion) {
         setStage(STAGES.RESULT);
       } else {
         setCurrentIndex((idx) => idx + 1);
