@@ -56,7 +56,8 @@ export const questions = [
       {
         id: 'q2-forgot',
         label: 'I forgot you were getting married',
-        feedback: 'You forgot we’re getting married but we’ll have you anyways.',
+        fail: true,
+        feedback: 'Since you forgot that we\'re getting married, then maybe you can forget about coming. Try again.',
       },
     ],
   },
@@ -93,56 +94,28 @@ export const questions = [
     id: 'q4',
     type: 'multiple-choice',
     label: 'Question 4',
-    prompt: 'What are you bringing as a wedding gift?',
-    options: [
-      {
-        id: 'q4-cash',
-        label: 'Cash, obviously',
-      },
-      {
-        id: 'q4-registry',
-        label: 'Something from the registry',
-      },
-      {
-        id: 'q4-cute',
-        label: 'Something cute I found',
-      },
-      {
-        id: 'q4-panic-buy',
-        label: 'I’ll panic buy something on the way',
-      },
-      {
-        id: 'q4-presence',
-        label: 'My presence is the gift',
-      },
-    ],
-  },
-  {
-    id: 'q5',
-    type: 'multiple-choice',
-    label: 'Question 5',
     prompt: 'What color dress will you wear to my wedding?',
     options: [
       {
-        id: 'q5-white',
+        id: 'q4-white',
         label: 'White',
         fail: true,
-        feedback: 'White!? At MY wedding?!',
+        feedback: 'Unless you\'re the bride, try again 😠',
       },
       {
-        id: 'q5-red',
+        id: 'q4-red',
         label: 'Red',
       },
       {
-        id: 'q5-black',
+        id: 'q4-black',
         label: 'Black',
       },
       {
-        id: 'q5-bright-pink',
+        id: 'q4-bright-pink',
         label: 'Bright pink',
       },
       {
-        id: 'q5-whatever',
+        id: 'q4-whatever',
         label: 'Whatever you tell me to',
       },
     ],

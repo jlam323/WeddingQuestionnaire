@@ -1,6 +1,6 @@
 # Wedding Save the Date
 
-A small React app for Anson & Joyce's save-the-date invitation. Guests start on a landing page, go through a quick 5-question quiz, and either get redirected to the official save-the-date link or get denied with feedback and a prompt to try again.
+A small React app for Anson & Joyce's save-the-date invitation. Guests start on a landing page, go through a quick 4-question quiz, and either get redirected to the official save-the-date link or get denied with feedback and a prompt to try again.
 
 ## Running locally
 
